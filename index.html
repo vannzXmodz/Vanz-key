@@ -29,7 +29,7 @@
 <div class="card">
     <div class="badge">VANNZ CORP // KEY ENGINE</div>
     <h1>ADMIN CONTROL PANEL</h1>
-    <p>Bulk generation & Firebase Realtime sync system</p>
+    <p>Bulk generation & Firebase Realtime sync system (Auto-Expiry)</p>
 
     <div class="group">
         <label>FIREBASE DATABASE URL</label>
@@ -105,21 +105,35 @@
         const generatedList = [];
         const patchData = {};
 
+        // ទាញយកម៉ោងបច្ចុប្បន្ន (Current Time)
+        const now = new Date();
+        const currentTimestamp = now.getTime(); // គិតជាមីលីវិនាទី
+        const currentISO = now.toISOString(); // ទម្រង់ ISO ឧទាហរណ៍: "2023-10-20T10:30:00.000Z"
+
+        // គណនាថ្ងៃផុតកំណត់ (Expiry Date)
+        const expiryDateObj = new Date(now);
+        if (unit === 'days') {
+            expiryDateObj.setDate(expiryDateObj.getDate() + durationVal);
+        } else if (unit === 'hours') {
+            expiryDateObj.setHours(expiryDateObj.getHours() + durationVal);
+        }
+        const expiryISO = expiryDateObj.toISOString();
+
         for (let i = 0; i < count; i++) {
             const keyString = createVANNZKey();
             const cleanKey = keyString.replace(/[^a-zA-Z0-9]/g, '');
 
             generatedList.push(keyString);
 
-            // First-Login Inactive Blueprint
+            // បំពេញទិន្នន័យដោយស្វ័យប្រវត្តិ
             patchData[cleanKey] = {
                 displayKey: keyString,
                 status: "ACTIVE",
                 durationValue: durationVal,
                 durationUnit: unit,
-                isActivated: false,
-                expiryDate: "NOT_ACTIVATED",
-                activatedAt: 0,
+                isActivated: true, // ប្តូរទៅជា true ដើម្បីឱ្យវាចាប់ផ្តើមរាប់ថ្ងៃ
+                expiryDate: expiryISO, // ថ្ងៃផុតកំណត់ពិតប្រាកដ
+                activatedAt: currentTimestamp, // ម៉ោងដែលបានបង្កើត (Timestamp)
                 maxDevices: maxDev,
                 registeredDevices: {}
             };
@@ -135,7 +149,7 @@
             if (response.ok) {
                 outputBox.value = generatedList.join('\n');
                 statusBox.style.color = "#00E676";
-                statusBox.innerText = `SUCCESS: ${count} KEYS ACTIVATED ON CLOUD`;
+                statusBox.innerText = `SUCCESS: ${count} KEYS ACTIVATED ON CLOUD (Auto-Expiry Set)`;
             } else {
                 statusBox.style.color = "#FF5252";
                 statusBox.innerText = `FIREBASE REJECTED (HTTP ${response.status})`;
