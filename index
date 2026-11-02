@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VANNZ CORP // KEY ENGINE</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
+        body { background: #04070D; color: #E0E0E0; display: flex; justify-content: center; padding: 20px; }
+        .card { background: #0A0F1D; border: 1px solid #FF0055; border-radius: 12px; width: 100%; max-width: 520px; padding: 24px; box-shadow: 0 0 20px rgba(255, 0, 85, 0.15); }
+        .badge { display: inline-block; background: #24060D; color: #FF0055; border: 1px solid #FF0055; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-bottom: 12px; }
+        h1 { font-size: 20px; color: #FFF; margin-bottom: 4px; letter-spacing: 1px; }
+        p { font-size: 12px; color: #5A6E85; margin-bottom: 20px; }
+        .group { margin-bottom: 14px; }
+        label { display: block; font-size: 11px; color: #FF0055; margin-bottom: 5px; font-weight: bold; }
+        input, select, textarea { width: 100%; background: #060A14; border: 1px solid #141F36; border-radius: 6px; padding: 10px; color: #FFF; font-size: 13px; outline: none; }
+        input:focus, select:focus, textarea:focus { border-color: #FF0055; }
+        .row { display: flex; gap: 10px; }
+        button { width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px; letter-spacing: 1px; transition: 0.2s; }
+        .btn-gen { background: #FF0055; color: #04070D; margin-top: 8px; }
+        .btn-gen:hover { background: #ff3377; }
+        .btn-copy { background: #1500E5FF; color: #FF0055; border: 1px solid #FF0055; margin-top: 8px; }
+        .status { margin-top: 12px; font-size: 11px; text-align: center; color: #8E929A; min-height: 16px; }
+        textarea { height: 130px; resize: none; margin-top: 10px; font-size: 12px; color: #FF0055; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="badge">VANNZ CORP // KEY ENGINE</div>
+    <h1>ADMIN CONTROL PANEL</h1>
+    <p>Bulk generation & Firebase Realtime sync system</p>
+
+    <div class="group">
+        <label>FIREBASE DATABASE URL</label>
+        <input type="text" id="fbUrl" value="https://vaannn-96e70-default-rtdb.firebaseio.com/">
+    </div>
+
+    <div class="row">
+        <div class="group" style="flex: 1;">
+            <label>NUMBER OF KEYS</label>
+            <input type="number" id="keyCount" value="5" min="1" max="100">
+        </div>
+        <div class="group" style="flex: 1;">
+            <label>MAX DEVICES</label>
+            <input type="number" id="maxDevices" value="1" min="1" max="10">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="group" style="flex: 1;">
+            <label>VALIDITY DURATION</label>
+            <input type="number" id="valDuration" value="7" min="1">
+        </div>
+        <div class="group" style="flex: 1;">
+            <label>TIME UNIT</label>
+            <select id="timeUnit">
+                <option value="hours">Hours</option>
+                <option value="days" selected>Days</option>
+            </select>
+        </div>
+    </div>
+
+    <button class="btn-gen" onclick="generateAndPush()">GENERATE & PUSH TO FIREBASE</button>
+    <div class="status" id="statusBox">READY</div>
+
+    <div class="group" style="margin-top: 14px;">
+        <label>GENERATED KEYS</label>
+        <textarea id="outputKeys" readonly placeholder="Generated keys will appear here..."></textarea>
+    </div>
+
+    <button class="btn-copy" id="copyBtn" onclick="copyAllKeys()">📋 COPY ALL KEYS</button>
+</div>
+
+<script>
+    function generateRandomSegment(length) {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let result = '';
+        for (let i = 0; i < length; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+    }
+
+    function createVANNZKey() {
+        // បង្កើត Key ជាទម្រង់ជាប់គ្នាដោយគ្មានសញ្ញា - (No Dash)
+        return `VANNZCRACKER${generateRandomSegment(15)}`;
+    }
+
+    async function generateAndPush() {
+        let baseUrl = document.getElementById('fbUrl').value.trim();
+        if (!baseUrl.endsWith('/')) baseUrl += '/';
+
+        const count = parseInt(document.getElementById('keyCount').value) || 1;
+        const maxDev = parseInt(document.getElementById('maxDevices').value) || 1;
+        const durationVal = parseInt(document.getElementById('valDuration').value) || 1;
+        const unit = document.getElementById('timeUnit').value;
+
+        const statusBox = document.getElementById('statusBox');
+        const outputBox = document.getElementById('outputKeys');
+
+        statusBox.style.color = "#FF0055";
+        statusBox.innerText = "UPLOADING TO FIREBASE...";
+        outputBox.value = "";
+
+        const generatedList = [];
+        const patchData = {};
+
+        for (let i = 0; i < count; i++) {
+            const keyString = createVANNZKey();
+            // ដោយសារគ្មានសញ្ញា - យើងមិនចាំបាច់ប្រើ cleanKey ទេ
+            const cleanKey = keyString;
+
+            generatedList.push(keyString);
+
+            // First-Login Inactive Blueprint
+            patchData[cleanKey] = {
+                displayKey: keyString,
+                status: "ACTIVE",
+                durationValue: durationVal,
+                durationUnit: unit,
+                isActivated: false,
+                expiryDate: "NOT_ACTIVATED",
+                activatedAt: 0,
+                maxDevices: maxDev,
+                registeredDevices: {}
+            };
+        }
+
+        try {
+            const response = await fetch(`${baseUrl}keys.json`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(patchData)
+            });
+
+            if (response.ok) {
+                outputBox.value = generatedList.join('\n');
+                statusBox.style.color = "#00E676";
+                statusBox.innerText = `SUCCESS: ${count} KEYS ACTIVATED ON CLOUD`;
+            } else {
+                statusBox.style.color = "#FF5252";
+                statusBox.innerText = `FIREBASE REJECTED (HTTP ${response.status})`;
+            }
+        } catch (err) {
+            statusBox.style.color = "#FF5252";
+            statusBox.innerText = `NETWORK ERROR: ${err.message}`;
+        }
+    }
+
+    function copyAllKeys() {
+        const text = document.getElementById('outputKeys').value;
+        if (!text) {
+            alert("No keys to copy!");
+            return;
+        }
+        navigator.clipboard.writeText(text).then(() => {
+            const copyBtn = document.getElementById('copyBtn');
+            copyBtn.innerText = "✅ COPIED TO CLIPBOARD!";
+            setTimeout(() => { copyBtn.innerText = "📋 COPY ALL KEYS"; }, 2000);
+        });
+    }
+</script>
+
+</body>
+</html>
