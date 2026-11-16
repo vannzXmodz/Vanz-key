@@ -7,12 +7,8 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', 'Khmer OS System', 'Khmer OS', Tahoma, sans-serif; }
         
-        /* 🌈 ផ្ទៃខាងក្រោយពណ៌រត់ចល័ត (Animated Gradient Background) */
         body { 
-            color: #fff; 
-            padding: 20px; 
-            min-height: 100vh;
-            overflow-x: hidden;
+            color: #fff; padding: 20px; min-height: 100vh; overflow-x: hidden;
             background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a1a2e, #16213e);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
@@ -26,11 +22,9 @@
 
         .container { max-width: 1050px; margin: auto; position: relative; padding-top: 20px; }
         
-        /* ប៊ូតុងប្តូរភាសា */
         .lang-switch {
             position: absolute; top: 0; right: 0;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3);
             color: #fff; padding: 8px 15px; border-radius: 20px;
             cursor: pointer; font-weight: bold; backdrop-filter: blur(5px);
         }
@@ -38,7 +32,7 @@
 
         h2 { text-align: center; color: #00e5ff; margin-bottom: 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.8); margin-top: 40px;}
         
-        input[type="text"], input[type="number"], select { 
+        input, select { 
             width: 100%; padding: 12px; margin: 10px 0; 
             background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255,255,255,0.2); 
             color: #fff; border-radius: 8px; outline: none;
@@ -53,13 +47,11 @@
         button:hover { opacity: 0.8; transform: translateY(-2px); }
         button.full-width { width: 100%; margin-top: 10px; padding: 12px; font-size: 16px; }
         
-        /* Button Colors */
-        button.danger { background: #ff4d4d; color: #fff; box-shadow: 0 4px 10px rgba(255,77,77,0.3); }
-        button.warning { background: #ffb300; color: #000; box-shadow: 0 4px 10px rgba(255,179,0,0.3); }
-        button.success { background: #00e676; color: #000; box-shadow: 0 4px 10px rgba(0,230,118,0.3); }
-        button.info { background: #2196F3; color: #fff; box-shadow: 0 4px 10px rgba(33,150,243,0.3); }
+        button.danger { background: #ff4d4d; color: #fff; }
+        button.warning { background: #ffb300; color: #000; }
+        button.success { background: #00e676; color: #000; }
+        button.info { background: #2196F3; color: #fff; }
 
-        /* Dashboard */
         .card { 
             background: rgba(30, 30, 30, 0.6); backdrop-filter: blur(10px); 
             padding: 20px; border-radius: 15px; margin-bottom: 20px; 
@@ -69,7 +61,6 @@
         .row { display: flex; gap: 15px; flex-wrap: wrap; }
         .row > * { flex: 1; min-width: 150px; }
         
-        /* Table */
         .table-container { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; min-width: 800px; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
@@ -83,33 +74,16 @@
         .action-btns { display: flex; flex-wrap: wrap; gap: 5px; }
         .action-btns button { padding: 5px 10px; font-size: 12px; box-shadow: none; }
 
-        /* 🆕 ការតុបតែងសម្រាប់ការចុច Copy Key */
-        .key-text {
-            color: #00e5ff;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: underline;
-            transition: 0.2s;
-        }
-        .key-text:hover {
-            color: #fff;
-            text-shadow: 0 0 10px #00e5ff;
-        }
+        .key-text { color: #00e5ff; font-weight: bold; cursor: pointer; text-decoration: underline; transition: 0.2s; }
+        .key-text:hover { color: #fff; text-shadow: 0 0 10px #00e5ff; }
         
         .toast { 
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
             background: #333; padding: 12px 24px; border-radius: 30px; 
-            display: none; z-index: 999; font-weight: bold; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            display: none; z-index: 999; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
         .toast.show { display: block; animation: slideUp 0.3s ease-out; }
-        
         @keyframes slideUp { from { bottom: -50px; opacity: 0; } to { bottom: 20px; opacity: 1; } }
-        
-        @media (max-width: 600px) {
-            h2 { font-size: 20px; }
-            .lang-switch { top: -15px; right: 10px; }
-        }
     </style>
 </head>
 <body>
@@ -117,14 +91,12 @@
 <div class="container">
     <button class="lang-switch" id="langBtn" onclick="toggleLanguage()">🇬🇧 English</button>
 
-    <!-- DASHBOARD SECTION -->
     <div id="dashboard">
         <h2 data-i18n="dash_title">🔑 Key Management System</h2>
         
         <!-- Create Key -->
         <div class="card">
             <h3 data-i18n="create_title">➕ បង្កើត Key ថ្មី</h3>
-            
             <div class="row">
                 <div>
                     <label data-i18n="lbl_type">ប្រភេទ Key:</label>
@@ -138,7 +110,6 @@
                     <input type="text" id="prefix" value="VIP-">
                 </div>
             </div>
-            
             <div class="row" style="margin-top:10px;">
                 <div>
                     <label data-i18n="lbl_days">ចំនួនថ្ងៃ (0=គ្មានកំណត់):</label>
@@ -149,7 +120,6 @@
                     <input type="number" id="qty" value="1">
                 </div>
             </div>
-            
             <button class="full-width success" onclick="generateKeys()" style="margin-top:15px;" data-i18n="btn_generate">បង្កើត Key ឥឡូវនេះ</button>
         </div>
 
@@ -159,7 +129,6 @@
                 <h3 data-i18n="list_title">📊 បញ្ជី Key ទាំងអស់</h3>
                 <button onclick="loadKeys()" style="padding:5px 15px; font-size:12px;" data-i18n="btn_refresh">🔄 ផ្ទុកឡើងវិញ</button>
             </div>
-            
             <div class="table-container">
                 <table id="keysTable">
                     <thead>
@@ -183,69 +152,39 @@
 <div id="toast" class="toast">ជោគជ័យ!</div>
 
 <script>
-    // ═══════════════════════════════════════════════════════════
-    // CONFIG
-    // ═══════════════════════════════════════════════════════════
+    // 🔴 ពិនិត្យ URL នេះឱ្យបានច្បាស់ (បើ Database នៅ Singapore ត្រូវប្រើ asia-southeast1 ជំនួស firebaseio.com)
     const FIREBASE_URL = "https://vanzkey-2e2fc-default-rtdb.firebaseio.com/keys/";
     
-    // ═══════════════════════════════════════════════════════════
-    // TRANSLATIONS (ប្តូរភាសា)
-    // ═══════════════════════════════════════════════════════════
     const i18n = {
         km: {
-            dash_title: "🔑 ប្រព័ន្ធគ្រប់គ្រង Key",
-            create_title: "➕ បង្កើត Key ថ្មី",
-            lbl_type: "ប្រភេទ Key:",
-            type_premium: "💎 ព្រីមៀម (១ ឧបករណ៍)",
-            type_trial: "🎟️ សាកល្បង (គ្រប់ឧបករណ៍)",
-            lbl_prefix: "អក្សរនាំមុខ (Prefix):",
-            lbl_days: "ចំនួនថ្ងៃ (0=គ្មានកំណត់):",
-            lbl_qty: "ចំនួន Key ត្រូវបង្កើត:",
-            btn_generate: "បង្កើត Key ឥឡូវនេះ",
-            list_title: "📊 បញ្ជី Key ទាំងអស់",
-            btn_refresh: "🔄 ផ្ទុកឡើងវិញ",
+            dash_title: "🔑 ប្រព័ន្ធគ្រប់គ្រង Key", create_title: "➕ បង្កើត Key ថ្មី",
+            lbl_type: "ប្រភេទ Key:", type_premium: "💎 ព្រីមៀម (១ ឧបករណ៍)", type_trial: "🎟️ សាកល្បង (គ្រប់ឧបករណ៍)",
+            lbl_prefix: "អក្សរនាំមុខ (Prefix):", lbl_days: "ចំនួនថ្ងៃ (0=គ្មានកំណត់):", lbl_qty: "ចំនួន Key ត្រូវបង្កើត:",
+            btn_generate: "បង្កើត Key ឥឡូវនេះ", list_title: "📊 បញ្ជី Key ទាំងអស់", btn_refresh: "🔄 ផ្ទុកឡើងវិញ",
             th_key: "Key (ចុចដើម្បីចម្លង)", th_type: "ប្រភេទ", th_date: "កាលបរិច្ឆេទ", th_device: "ឧបករណ៍", th_action: "សកម្មភាព",
-            st_active: "✅ សកម្ម", st_banned: "🚫 បិទ", st_expired: "⏰ ផុតកំណត់",
-            dev_free: "➖ ទំនេរ",
+            st_active: "✅ សកម្ម", st_banned: "🚫 បិទ", st_expired: "⏰ ផុតកំណត់", dev_free: "➖ ទំនេរ",
             btn_ban: "បិទ", btn_unban: "បើក", btn_switch: "ប្តូរប្រភេទ", btn_reset: "ដោះសោ", btn_add: "+30 ថ្ងៃ", btn_del: "លុប",
-            msg_success: "ជោគជ័យ!", msg_fail: "បរាជ័យ!",
-            msg_copied: "📋 ចម្លង Key ជោគជ័យ!",
-            msg_confirm_del: "តើអ្នកប្រាកដជាចង់លុប Key នេះមែនទេ?",
-            msg_confirm_reset: "តើអ្នកចង់ Reset ឧបករណ៍សម្រាប់ Key នេះមែនទេ?",
-            msg_confirm_switch: "ផ្លាស់ប្តូរប្រភេទ Key នេះមែនទេ?",
-            msg_unlimited: "គ្មានកំណត់",
-            msg_loading: "⏳ កំពុងទាញយកទិន្នន័យ...",
-            msg_no_key: "មិនមាន Key ទេ"
+            msg_success: "ជោគជ័យ!", msg_fail: "បរាជ័យ!", msg_copied: "📋 ចម្លង Key ជោគជ័យ!",
+            msg_confirm_del: "តើអ្នកប្រាកដជាចង់លុប Key នេះមែនទេ?", msg_confirm_reset: "តើអ្នកចង់ Reset ឧបករណ៍សម្រាប់ Key នេះមែនទេ?",
+            msg_confirm_switch: "ផ្លាស់ប្តូរប្រភេទ Key នេះមែនទេ?", msg_unlimited: "គ្មានកំណត់",
+            msg_loading: "⏳ កំពុងទាញយកទិន្នន័យ...", msg_no_key: "មិនមាន Key ទេ"
         },
         en: {
-            dash_title: "🔑 Key Management System",
-            create_title: "➕ Create New Key",
-            lbl_type: "Key Type:",
-            type_premium: "💎 Premium (1 Device)",
-            type_trial: "🎟️ Trial (Unlimited)",
-            lbl_prefix: "Prefix:",
-            lbl_days: "Days valid (0=never):",
-            lbl_qty: "Quantity:",
-            btn_generate: "Generate Keys Now",
-            list_title: "📊 All Keys List",
-            btn_refresh: "🔄 Refresh",
+            dash_title: "🔑 Key Management System", create_title: "➕ Create New Key",
+            lbl_type: "Key Type:", type_premium: "💎 Premium (1 Device)", type_trial: "🎟️ Trial (Unlimited)",
+            lbl_prefix: "Prefix:", lbl_days: "Days valid (0=never):", lbl_qty: "Quantity:",
+            btn_generate: "Generate Keys Now", list_title: "📊 All Keys List", btn_refresh: "🔄 Refresh",
             th_key: "Key (Click to Copy)", th_type: "Type", th_date: "Expiry Date", th_device: "Device", th_action: "Actions",
-            st_active: "✅ Active", st_banned: "🚫 Banned);
-", st_expired: "⏰ Expired",
-            dev_free: "➖ Free",
+            st_active: "✅ Active", st_banned: "🚫 Banned", st_expired: "⏰ Expired", dev_free: "➖ Free",
             btn_ban: "Ban", btn_unban: "Unban", btn_switch: "Switch", btn_reset: "Reset", btn_add: "+30 Days", btn_del: "Del",
-            msg_success: "Success!", msg_fail: "Failed!",
-            msg_copied: "📋 Key Copied!",
-            msg_confirm_del: "Are you sure you want to delete this key?",
-            msg_confirm_reset: "Do you want to reset the device for this key?",
-            msg_confirm_switch: "Switch key type?",
-            msg_unlimited: "Unlimited",
-            msg_loading: "⏳ Loading data...",
-            msg_no_key: "No keys found"
+            msg_success: "Success!", msg_fail: "Failed!", msg_copied: "📋 Key Copied!",
+            msg_confirm_del: "Are you sure you want to delete this key?", msg_confirm_reset: "Do you want to reset the device for this key?",
+            msg_confirm_switch: "Switch key type?", msg_unlimited: "Unlimited",
+            msg_loading: "⏳ Loading data...", msg_no_key: "No keys found"
         }
     };
 
-    let currentLang = "km"; // ភាសាដើម
+    let currentLang = "km";
 
     function toggleLanguage() {
         currentLang = (currentLang === "km") ? "en" : "km";
@@ -255,28 +194,24 @@
 
     function updateLanguageUI() {
         document.getElementById('langBtn').innerText = (currentLang === "km") ? "🇬🇧 English" : "🇰🇭 ខ្មែរ";
-        
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             if (i18n[currentLang][key]) el.innerText = i18n[currentLang][key];
         });
     }
 
-    // ═══════════════════════════════════════════════════════════
-    // HELPERS
-    // ═══════════════════════════════════════════════════════════
     function showToast(msg, isError = false) {
         const t = document.getElementById('toast');
         t.innerText = msg;
         t.style.background = isError ? '#ff4d4d' : '#00e676';
         t.style.color = isError ? '#fff' : '#000';
         t.className = "toast show";
-        setTimeout(() => { t.className = "toast"; }, 3000    }
+        setTimeout(() => { t.className = "toast"; }, 3000);
+    }
 
     function formatDate(unixTimestamp) {
         if (!unixTimestamp || unixTimestamp == 0) return "♾️ " + i18n[currentLang].msg_unlimited;
-        const d = new Date(unixTimestamp * 1000);
-        return d.toLocaleDateString("en-GB"); 
+        return new Date(unixTimestamp * 1000).toLocaleDateString("en-GB"); 
     }
 
     function generateRandomString(length) {
@@ -289,77 +224,69 @@
         return result;
     }
 
-    // ═══════════════════════════════════════════════════════════
-    // 🆕 COPY KEY FUNCTION
-    // ═══════════════════════════════════════════════════════════
     function copyKey(key) {
-        // ព្យាយាមប្រើ API ទំនើបជាមុនសិន
         if (navigator.clipboard && window.isSecureContext) {
-            navigator.clipboard.writeText(key).then(() => {
-                showToast(i18n[currentLang].msg_copied);
-            }).catch(() => fallbackCopy(key));
+            navigator.clipboard.writeText(key).then(() => showToast(i18n[currentLang].msg_copied)).catch(() => fallbackCopy(key));
         } else {
             fallbackCopy(key);
         }
     }
 
-    // វិធីសាស្ត្របម្រុងសម្រាប់ Browser ចាស់ៗ ឬ WebView
     function fallbackCopy(text) {
         const textArea = document.createElement("textarea");
         textArea.value = text;
         textArea.style.position = "fixed"; 
         document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        try {
-            document.execCommand('copy');
-            showToast(i18n[currentLang].msg_copied);
-        } catch (err) {
-            showToast("❌ មិនអាចចម្លងបានទេ", true);
-        }
+        textArea.focus(); textArea.select();
+        try { document.execCommand('copy'); showToast(i18n[currentLang].msg_copied); } 
+        catch (err) { showToast("❌ មិនអាចចម្លងបានទេ", true); }
         document.body.removeChild(textArea);
     }
 
-    // ═══════════════════════════════════════════════════════════
-    // CREATE KEY
-    // ═══════════════════════════════════════════════════════════
     async function generateKeys() {
-        const keyType = document.getElementById('keyType').value;
-        let prefix = document.getElementById('prefix').value.replace(/[^a-zA-Z0-9\-]/g, ''); 
-        const days = parseInt(document.getElementById('days').value) || 0;
-        const qty = parseInt(document.getElementById('qty').value) || 1;
+        try {
+            const keyType = document.getElementById('keyType').value;
+            let prefix = document.getElementById('prefix').value.replace(/[^a-zA-Z0-9\-]/g, ''); 
+            const days = parseInt(document.getElementById('days').value) || 0;
+            const qty = parseInt(document.getElementById('qty').value) || 1;
 
-        if (prefix === "") prefix = "KEY-";
-        let expires = days > 0 ? Math.floor(Date.now() / 1000) + (days * 86400) : 0;
-        const created = Math.floor(Date.now() / 1000);
-        let createdKeys = [];
+            if (prefix === "") prefix = "KEY-";
+            let expires = days > 0 ? Math.floor(Date.now() / 1000) + (days * 86400) : 0;
+            const created = Math.floor(Date.now() / 1000);
+            let createdKeys = [];
+            let errorMsg = "";
 
-        for (let i = 0; i < qty; i++) {
-            const key = prefix + generateRandomString(16);
-            const payload = { expires: expires, banned: false, type: keyType, created: created };
+            showToast("⏳ កំពុងបង្កើត Key...", false);
 
-            try {
+            for (let i = 0; i < qty; i++) {
+                const key = prefix + generateRandomString(16);
+                const payload = { expires: expires, banned: false, type: keyType, created: created };
+
                 const res = await fetch(FIREBASE_URL + key + ".json", {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                if (res.ok) createdKeys.push(key);
-            } catch (e) { console.error(e); }
-        }
 
-        if (createdKeys.length > 0) {
-            showToast(`✅ ${i18n[currentLang].msg_success} (${createdKeys.length})`);
-            alert("Keys:\n\n" + createdKeys.join("\n"));
-            loadKeys();
-        } else {
-            showToast("❌ " + i18n[currentLang].msg_fail, true);
+                if (res.ok) {
+                    createdKeys.push(key);
+                } else {
+                    errorMsg = "HTTP Code: " + res.status; // បើ Error វានឹងបង្ហាញលេខកូដនៅទីនេះ
+                }
+            }
+
+            if (createdKeys.length > 0) {
+                showToast(`✅ ${i18n[currentLang].msg_success} (${createdKeys.length})`);
+                alert("Keys:\n\n" + createdKeys.join("\n"));
+                loadKeys();
+            } else {
+                alert("❌ បរាជ័យ!\nមូលហេតុ: " + errorMsg + "\n\n(សូមពិនិត្យ URL ឬ Firebase Rules ម្តងទៀត)");
+            }
+        } catch (e) {
+            alert("⚠️ មានបញ្ហា JavaScript: " + e.message);
         }
     }
 
-    // ═══════════════════════════════════════════════════════════
-    // LOAD & RENDER KEYS
-    // ═══════════════════════════════════════════════════════════
     async function loadKeys() {
         const tbody = document.getElementById('keysBody');
         const t = i18n[currentLang];
@@ -367,8 +294,12 @@
 
         try {
             const res = await fetch(FIREBASE_URL + ".json");
-            const data = await res.json();
             
+            if (!res.ok) throw new Error("HTTP " + res.status + " (Rules មិនទាន់បើក ឬ URL ខុស)");
+            
+            const data = await res.json();
+            if (data && data.error) throw new Error(data.error);
+
             if (!data) {
                 tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">${t.msg_no_key}</td></tr>`;
                 return;
@@ -378,6 +309,8 @@
             const sortedKeys = Object.entries(data).sort((a, b) => (b[1].created || 0) - (a[1].created || 0));
 
             for (const [key, info] of sortedKeys) {
+                if (typeof info !== 'object' || info === null) continue; 
+
                 const isBanned = info.banned === true || info.banned === "true";
                 const isExpired = info.expires > 0 && (Date.now() / 1000) > info.expires;
                 
@@ -387,18 +320,12 @@
 
                 let deviceText = info.device ? `<span style="color:#00e5ff">🔒 ${info.device.substring(0, 6)}...</span>` : `<span style="color:#aaa">${t.dev_free}</span>`;
                 let typeText = info.type === "trial" ? t.type_trial : t.type_premium;
-                let dateText = formatDate(info.expires);
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <!-- 🆕 បន្ថែម Onclick និង រូបតំណាង Copy នៅទីនេះ -->
-                    <td>
-                        <span class="key-text" onclick="copyKey('${key}')" title="ចុចដើម្បីចម្លង">
-                            ${key} 📋
-                        </span>
-                    </td>
+                    <td><span class="key-text" onclick="copyKey('${key}')">${key} 📋</span></td>
                     <td>${typeText}</td>
-                    <td>${dateText}<br><small>${statusIcon}</small></td>
+                    <td>${formatDate(info.expires)}<br><small>${statusIcon}</small></td>
                     <td>${deviceText}</td>
                     <td class="action-btns">
                         <button class="${isBanned ? 'success' : 'warning'}" onclick="toggleBan('${key}', ${isBanned})">${isBanned ? t.btn_unban : t.btn_ban}</button>
@@ -411,61 +338,41 @@
                 tbody.appendChild(tr);
             }
         } catch (e) {
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#ff4d4d;">❌ Error Loading Data</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#ff4d4d; font-weight:bold;">❌ ${e.message}</td></tr>`;
         }
     }
 
-    // ═══════════════════════════════════════════════════════════
-    // ACTIONS
-    // ═══════════════════════════════════════════════════════════
     async function toggleBan(key, currentStatus) {
-        const newStatus = !currentStatus;
-        await fetch(FIREBASE_URL + key + "/banned.json", { method: 'PUT', body: JSON.stringify(newStatus) });
-        showToast(newStatus ? "🚫 Banned" : "✅ Unbanned");
+        await fetch(FIREBASE_URL + key + "/banned.json", { method: 'PUT', body: JSON.stringify(!currentStatus) });
         loadKeys();
     }
 
     async function changeType(key, currentType) {
         if (!confirm(i18n[currentLang].msg_confirm_switch)) return;
         const newType = currentType === "trial" ? "premium" : "trial";
-        
         await fetch(FIREBASE_URL + key + "/type.json", { method: 'PUT', body: JSON.stringify(newType) });
-        
-        if (newType === "trial") {
-            await fetch(FIREBASE_URL + key + "/device.json", { method: 'PUT', body: JSON.stringify("") });
-        }
-        showToast(`🔄 Switched to ${newType.toUpperCase()}`);
+        if (newType === "trial") await fetch(FIREBASE_URL + key + "/device.json", { method: 'PUT', body: JSON.stringify("") });
         loadKeys();
     }
 
     async function resetDevice(key) {
         if (!confirm(i18n[currentLang].msg_confirm_reset)) return;
         await fetch(FIREBASE_URL + key + "/device.json", { method: 'PUT', body: JSON.stringify("") });
-        showToast("🔄 Device Reset Success");
         loadKeys();
     }
 
     async function addDays(key, currentExpires) {
-        let newExpires = 0;
-        if (currentExpires == 0) {
-            if(!confirm("Key is unlimited. Set to 30 days?")) return;
-            newExpires = Math.floor(Date.now() / 1000) + (30 * 86400);
-        } else {
-            newExpires = currentExpires + (30 * 86400);
-        }
+        let newExpires = currentExpires === 0 ? Math.floor(Date.now()/1000) + (30*86400) : currentExpires + (30*86400);
         await fetch(FIREBASE_URL + key + "/expires.json", { method: 'PUT', body: JSON.stringify(newExpires) });
-        showToast("⏰ +30 Days Added");
         loadKeys();
     }
 
     async function deleteKey(key) {
-        if (!confirm("⚠️ " + i18n[currentLang].msg_confirm_del)) return;
+        if (!confirm(i18n[currentLang].msg_confirm_del)) return;
         await fetch(FIREBASE_URL + key + ".json", { method: 'DELETE' });
-        showToast("🗑️ Key Deleted");
         loadKeys();
     }
 
-    // ចាប់ផ្តើមដំណើរការ
     updateLanguageUI();
     loadKeys();
 </script>
