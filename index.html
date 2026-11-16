@@ -82,6 +82,19 @@
         
         .action-btns { display: flex; flex-wrap: wrap; gap: 5px; }
         .action-btns button { padding: 5px 10px; font-size: 12px; box-shadow: none; }
+
+        /* 🆕 ការតុបតែងសម្រាប់ការចុច Copy Key */
+        .key-text {
+            color: #00e5ff;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: underline;
+            transition: 0.2s;
+        }
+        .key-text:hover {
+            color: #fff;
+            text-shadow: 0 0 10px #00e5ff;
+        }
         
         .toast { 
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
@@ -104,7 +117,7 @@
 <div class="container">
     <button class="lang-switch" id="langBtn" onclick="toggleLanguage()">🇬🇧 English</button>
 
-    <!-- DASHBOARD SECTION (បង្ហាញភ្លាមៗ) -->
+    <!-- DASHBOARD SECTION -->
     <div id="dashboard">
         <h2 data-i18n="dash_title">🔑 Key Management System</h2>
         
@@ -151,7 +164,7 @@
                 <table id="keysTable">
                     <thead>
                         <tr>
-                            <th data-i18n="th_key">Key</th>
+                            <th data-i18n="th_key">Key (ចុចដើម្បីចម្លង)</th>
                             <th data-i18n="th_type">ប្រភេទ</th>
                             <th data-i18n="th_date">កាលបរិច្ឆេទ</th>
                             <th data-i18n="th_device">ឧបករណ៍</th>
@@ -191,11 +204,12 @@
             btn_generate: "បង្កើត Key ឥឡូវនេះ",
             list_title: "📊 បញ្ជី Key ទាំងអស់",
             btn_refresh: "🔄 ផ្ទុកឡើងវិញ",
-            th_key: "Key", th_type: "ប្រភេទ", th_date: "កាលបរិច្ឆេទ", th_device: "ឧបករណ៍", th_action: "សកម្មភាព",
+            th_key: "Key (ចុចដើម្បីចម្លង)", th_type: "ប្រភេទ", th_date: "កាលបរិច្ឆេទ", th_device: "ឧបករណ៍", th_action: "សកម្មភាព",
             st_active: "✅ សកម្ម", st_banned: "🚫 បិទ", st_expired: "⏰ ផុតកំណត់",
             dev_free: "➖ ទំនេរ",
             btn_ban: "បិទ", btn_unban: "បើក", btn_switch: "ប្តូរប្រភេទ", btn_reset: "ដោះសោ", btn_add: "+30 ថ្ងៃ", btn_del: "លុប",
             msg_success: "ជោគជ័យ!", msg_fail: "បរាជ័យ!",
+            msg_copied: "📋 ចម្លង Key ជោគជ័យ!",
             msg_confirm_del: "តើអ្នកប្រាកដជាចង់លុប Key នេះមែនទេ?",
             msg_confirm_reset: "តើអ្នកចង់ Reset ឧបករណ៍សម្រាប់ Key នេះមែនទេ?",
             msg_confirm_switch: "ផ្លាស់ប្តូរប្រភេទ Key នេះមែនទេ?",
@@ -215,11 +229,13 @@
             btn_generate: "Generate Keys Now",
             list_title: "📊 All Keys List",
             btn_refresh: "🔄 Refresh",
-            th_key: "Key", th_type: "Type", th_date: "Expiry Date", th_device: "Device", th_action: "Actions",
-            st_active: "✅ Active", st_banned: "🚫 Banned", st_expired: "⏰ Expired",
+            th_key: "Key (Click to Copy)", th_type: "Type", th_date: "Expiry Date", th_device: "Device", th_action: "Actions",
+            st_active: "✅ Active", st_banned: "🚫 Banned);
+", st_expired: "⏰ Expired",
             dev_free: "➖ Free",
             btn_ban: "Ban", btn_unban: "Unban", btn_switch: "Switch", btn_reset: "Reset", btn_add: "+30 Days", btn_del: "Del",
             msg_success: "Success!", msg_fail: "Failed!",
+            msg_copied: "📋 Key Copied!",
             msg_confirm_del: "Are you sure you want to delete this key?",
             msg_confirm_reset: "Do you want to reset the device for this key?",
             msg_confirm_switch: "Switch key type?",
@@ -255,8 +271,7 @@
         t.style.background = isError ? '#ff4d4d' : '#00e676';
         t.style.color = isError ? '#fff' : '#000';
         t.className = "toast show";
-        setTimeout(() => { t.className = "toast"; }, 3000);
-    }
+        setTimeout(() => { t.className = "toast"; }, 3000    }
 
     function formatDate(unixTimestamp) {
         if (!unixTimestamp || unixTimestamp == 0) return "♾️ " + i18n[currentLang].msg_unlimited;
@@ -272,6 +287,37 @@
             if ((i + 1) % 4 === 0 && i < length - 1) result += "-";
         }
         return result;
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // 🆕 COPY KEY FUNCTION
+    // ═══════════════════════════════════════════════════════════
+    function copyKey(key) {
+        // ព្យាយាមប្រើ API ទំនើបជាមុនសិន
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(key).then(() => {
+                showToast(i18n[currentLang].msg_copied);
+            }).catch(() => fallbackCopy(key));
+        } else {
+            fallbackCopy(key);
+        }
+    }
+
+    // វិធីសាស្ត្របម្រុងសម្រាប់ Browser ចាស់ៗ ឬ WebView
+    function fallbackCopy(text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed"; 
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            showToast(i18n[currentLang].msg_copied);
+        } catch (err) {
+            showToast("❌ មិនអាចចម្លងបានទេ", true);
+        }
+        document.body.removeChild(textArea);
     }
 
     // ═══════════════════════════════════════════════════════════
@@ -345,7 +391,12 @@
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td style="font-weight:bold;">${key}</td>
+                    <!-- 🆕 បន្ថែម Onclick និង រូបតំណាង Copy នៅទីនេះ -->
+                    <td>
+                        <span class="key-text" onclick="copyKey('${key}')" title="ចុចដើម្បីចម្លង">
+                            ${key} 📋
+                        </span>
+                    </td>
                     <td>${typeText}</td>
                     <td>${dateText}<br><small>${statusIcon}</small></td>
                     <td>${deviceText}</td>
