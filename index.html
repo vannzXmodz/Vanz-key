@@ -7,25 +7,24 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', 'Khmer OS System', 'Khmer OS', Tahoma, sans-serif; }
         
-        /* ផ្ទៃខាងក្រោយប្តូរតាមរូបភាព (Random Background) */
+        /* 🌈 ផ្ទៃខាងក្រោយពណ៌រត់ចល័ត (Animated Gradient Background) */
         body { 
-            background-color: #121212; 
             color: #fff; 
             padding: 20px; 
             min-height: 100vh;
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            transition: background-image 1s ease-in-out;
-        }
-        
-        /* ធ្វើឱ្យរូបភាពខាងក្រោយងងឹតបន្តិច ដើម្បីងាយស្រួលមើលអក្សរ */
-        .overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7); z-index: -1;
+            overflow-x: hidden;
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a1a2e, #16213e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
         }
 
-        .container { max-width: 1050px; margin: auto; position: relative; }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container { max-width: 1050px; margin: auto; position: relative; padding-top: 20px; }
         
         /* ប៊ូតុងប្តូរភាសា */
         .lang-switch {
@@ -37,19 +36,11 @@
         }
         .lang-switch:hover { background: rgba(255, 255, 255, 0.2); }
 
-        h2 { text-align: center; color: #00e5ff; margin-bottom: 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.8); }
+        h2 { text-align: center; color: #00e5ff; margin-bottom: 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.8); margin-top: 40px;}
         
-        /* Login Box */
-        #loginBox { 
-            background: rgba(30, 30, 30, 0.6); backdrop-filter: blur(10px); 
-            padding: 30px; border-radius: 15px; text-align: center; 
-            margin-top: 80px; max-width: 400px; margin-left: auto; margin-right: auto;
-            border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        
-        input[type="password"], input[type="text"], input[type="number"], select { 
+        input[type="text"], input[type="number"], select { 
             width: 100%; padding: 12px; margin: 10px 0; 
-            background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.2); 
+            background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255,255,255,0.2); 
             color: #fff; border-radius: 8px; outline: none;
         }
         input:focus, select:focus { border-color: #00e5ff; }
@@ -69,9 +60,8 @@
         button.info { background: #2196F3; color: #fff; box-shadow: 0 4px 10px rgba(33,150,243,0.3); }
 
         /* Dashboard */
-        #dashboard { display: none; margin-top: 40px; }
         .card { 
-            background: rgba(30, 30, 30, 0.7); backdrop-filter: blur(10px); 
+            background: rgba(30, 30, 30, 0.6); backdrop-filter: blur(10px); 
             padding: 20px; border-radius: 15px; margin-bottom: 20px; 
             border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
@@ -104,26 +94,17 @@
         @keyframes slideUp { from { bottom: -50px; opacity: 0; } to { bottom: 20px; opacity: 1; } }
         
         @media (max-width: 600px) {
-            h2 { font-size: 20px; margin-top: 40px; }
-            .lang-switch { top: -10px; right: 10px; }
+            h2 { font-size: 20px; }
+            .lang-switch { top: -15px; right: 10px; }
         }
     </style>
 </head>
 <body>
 
-<div class="overlay"></div>
-
 <div class="container">
     <button class="lang-switch" id="langBtn" onclick="toggleLanguage()">🇬🇧 English</button>
 
-    <!-- LOGIN SECTION -->
-    <div id="loginBox">
-        <h2 id="t_login_title">🔐 Admin Login</h2>
-        <input type="password" id="password" placeholder="បញ្ចូលលេខកូដសម្ងាត់" data-i18n-placeholder="login_pass_ph">
-        <button class="full-width" onclick="login()" data-i18n="btn_login">ចូលគណនី</button>
-    </div>
-
-    <!-- DASHBOARD SECTION -->
+    <!-- DASHBOARD SECTION (បង្ហាញភ្លាមៗ) -->
     <div id="dashboard">
         <h2 data-i18n="dash_title">🔑 Key Management System</h2>
         
@@ -193,33 +174,12 @@
     // CONFIG
     // ═══════════════════════════════════════════════════════════
     const FIREBASE_URL = "https://vanzkey-2e2fc-default-rtdb.firebaseio.com/keys/";
-    const ADMIN_PASS = "1"; 
-
-    // ═══════════════════════════════════════════════════════════
-    // RANDOM BACKGROUND (រូបភាពផ្ទៃខាងក្រោយ)
-    // ═══════════════════════════════════════════════════════════
-    const backgrounds = [
-        "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1920&auto=format&fit=crop", // Retro Gaming
-        "https://images.unsplash.com/photo-1614294149010-950b698f72c0?q=80&w=1920&auto=format&fit=crop", // Neon Setup
-        "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1920&auto=format&fit=crop", // Esports
-        "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1920&auto=format&fit=crop", // Gaming Controller
-        "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=1920&auto=format&fit=crop"  // Arcade
-    ];
-
-    function setRandomBackground() {
-        const randomImg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-        document.body.style.backgroundImage = `url('${randomImg}')`;
-    }
-    setRandomBackground(); // ហៅដំណើរការពេលបើកដំបូង
-
+    
     // ═══════════════════════════════════════════════════════════
     // TRANSLATIONS (ប្តូរភាសា)
     // ═══════════════════════════════════════════════════════════
     const i18n = {
         km: {
-            login_title: "🔐 ចូលគណនី Admin",
-            login_pass_ph: "បញ្ចូលលេខកូដសម្ងាត់",
-            btn_login: "ចូលគណនី",
             dash_title: "🔑 ប្រព័ន្ធគ្រប់គ្រង Key",
             create_title: "➕ បង្កើត Key ថ្មី",
             lbl_type: "ប្រភេទ Key:",
@@ -235,7 +195,7 @@
             st_active: "✅ សកម្ម", st_banned: "🚫 បិទ", st_expired: "⏰ ផុតកំណត់",
             dev_free: "➖ ទំនេរ",
             btn_ban: "បិទ", btn_unban: "បើក", btn_switch: "ប្តូរប្រភេទ", btn_reset: "ដោះសោ", btn_add: "+30 ថ្ងៃ", btn_del: "លុប",
-            msg_success: "ជោគជ័យ!", msg_fail: "បរាជ័យ!", msg_wrong_pass: "លេខកូដសម្ងាត់មិនត្រឹមត្រូវ!",
+            msg_success: "ជោគជ័យ!", msg_fail: "បរាជ័យ!",
             msg_confirm_del: "តើអ្នកប្រាកដជាចង់លុប Key នេះមែនទេ?",
             msg_confirm_reset: "តើអ្នកចង់ Reset ឧបករណ៍សម្រាប់ Key នេះមែនទេ?",
             msg_confirm_switch: "ផ្លាស់ប្តូរប្រភេទ Key នេះមែនទេ?",
@@ -244,9 +204,6 @@
             msg_no_key: "មិនមាន Key ទេ"
         },
         en: {
-            login_title: "🔐 Admin Login",
-            login_pass_ph: "Enter your password",
-            btn_login: "Login",
             dash_title: "🔑 Key Management System",
             create_title: "➕ Create New Key",
             lbl_type: "Key Type:",
@@ -258,11 +215,11 @@
             btn_generate: "Generate Keys Now",
             list_title: "📊 All Keys List",
             btn_refresh: "🔄 Refresh",
-            th_key: "Key", th_type: "Type", th_date: "Expiry Date", th_device: "Device", th_action:➖ "Actions",
-            st_active: " Free",
-            btn_✅ Active", st_banned: "🚫 Banned", st_expired: "⏰ Expired",
-            dev_free: "ban: "Ban", btn_unban: "Unban", btn_switch: "Switch", btn_reset: "Reset", btn_add: "+30 Days", btn_del: "Del",
-            msg_success: "Success!", msg_fail: "Failed!", msg_wrong_pass: "Wrong Password!",
+            th_key: "Key", th_type: "Type", th_date: "Expiry Date", th_device: "Device", th_action: "Actions",
+            st_active: "✅ Active", st_banned: "🚫 Banned", st_expired: "⏰ Expired",
+            dev_free: "➖ Free",
+            btn_ban: "Ban", btn_unban: "Unban", btn_switch: "Switch", btn_reset: "Reset", btn_add: "+30 Days", btn_del: "Del",
+            msg_success: "Success!", msg_fail: "Failed!",
             msg_confirm_del: "Are you sure you want to delete this key?",
             msg_confirm_reset: "Do you want to reset the device for this key?",
             msg_confirm_switch: "Switch key type?",
@@ -277,9 +234,7 @@
     function toggleLanguage() {
         currentLang = (currentLang === "km") ? "en" : "km";
         updateLanguageUI();
-        if(document.getElementById('dashboard').style.display === 'block') {
-            loadKeys(); // បង្ហាញតារាងឡើងវិញជាមួយភាសាថ្មី
-        }
+        loadKeys(); 
     }
 
     function updateLanguageUI() {
@@ -289,15 +244,7 @@
             const key = el.getAttribute('data-i18n');
             if (i18n[currentLang][key]) el.innerText = i18n[currentLang][key];
         });
-
-        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-            const key = el.getAttribute('data-i18n-placeholder');
-            if (i18n[currentLang][key]) el.placeholder = i18n[currentLang][key];
-        });
     }
-
-    // ហៅប្តូរភាសាពេលបើកដំបូង
-    updateLanguageUI();
 
     // ═══════════════════════════════════════════════════════════
     // HELPERS
@@ -311,21 +258,10 @@
         setTimeout(() => { t.className = "toast"; }, 3000);
     }
 
-    function login() {
-        const pass = document.getElementById('password').value;
-        if (pass === ADMIN_PASS) {
-            document.getElementById('loginBox').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            loadKeys();
-        } else {
-            alert("❌ " + i18n[currentLang].msg_wrong_pass);
-        }
-    }
-
     function formatDate(unixTimestamp) {
         if (!unixTimestamp || unixTimestamp == 0) return "♾️ " + i18n[currentLang].msg_unlimited;
         const d = new Date(unixTimestamp * 1000);
-        return d.toLocaleDateString("en-GB"); // DD/MM/YYYY
+        return d.toLocaleDateString("en-GB"); 
     }
 
     function generateRandomString(length) {
@@ -444,7 +380,7 @@
         
         await fetch(FIREBASE_URL + key + "/type.json", { method: 'PUT', body: JSON.stringify(newType) });
         
-        == if (newType === "trial") {
+        if (newType === "trial") {
             await fetch(FIREBASE_URL + key + "/device.json", { method: 'PUT', body: JSON.stringify("") });
         }
         showToast(`🔄 Switched to ${newType.toUpperCase()}`);
@@ -460,7 +396,7 @@
 
     async function addDays(key, currentExpires) {
         let newExpires = 0;
-        if (currentExpires 0) {
+        if (currentExpires == 0) {
             if(!confirm("Key is unlimited. Set to 30 days?")) return;
             newExpires = Math.floor(Date.now() / 1000) + (30 * 86400);
         } else {
@@ -477,6 +413,10 @@
         showToast("🗑️ Key Deleted");
         loadKeys();
     }
+
+    // ចាប់ផ្តើមដំណើរការ
+    updateLanguageUI();
+    loadKeys();
 </script>
 </body>
 </html>
